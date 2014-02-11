@@ -1,3 +1,3 @@
-hw3/Makefile
-hw3/nasm*
-hw3/*.o
+study1/Makefile
+study1/nasm*
+study1/*.o
