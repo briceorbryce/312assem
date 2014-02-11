@@ -1,4 +1,1 @@
-study1/nasm_check/Makefile
-study1/nasm*
-study1/*.o
-
+study1/nasm_check/*
