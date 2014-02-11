@@ -22,5 +22,4 @@ driver.o: driver.c
 	$(CC) $(CFLAGS) -c driver.c -o driver.o
 
 clean:
-	/bin/rm -f *.o $(PROGRAM)
-
+	/bin/rm -f $(PROGRAM)*.o $(PROGRAM)
