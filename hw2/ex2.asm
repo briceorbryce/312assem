@@ -1,14 +1,9 @@
 section .data	; data segment
-msg	db	"Hello, world!", 0x0a	; the string and newline char
-;mlen	equ	$-message
 
-A 		dw	011FAh
-B		db	043h, 0BBh, 0CEh
-C times 3	dw	21
-D		dd	178
-E		db	"a", 54, "b", 0
-F times 2	dw	-8
-G 		dw	009h
+L1 dw 435
+L2 db "h","e","l","l","o",0
+L3 db 0A1h, 0B2h, 0C3h
+L4 dw 23o
 
 section	.text	; Text segment
 
@@ -16,9 +11,13 @@ global _start	; Default entry for ELF linking
 
 _start:
 nop
-
-; ex is the return number
-; echo $? - echos back the thing
+mov eax, [L3]
+inc eax
+mov [L2], eax
+mov bx, [L1]
+mov eax, L3
+inc eax
+mov [eax], bx
 
 ; SYSCALL: exit(0)
 mov eax, 1	; put 1 into eax, since exit is syscall #1
