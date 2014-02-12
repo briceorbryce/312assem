@@ -20,26 +20,29 @@ asm_main:
 	pusha
 ; start
 
-	mov	eax, msg1	; print msg1
+	mov	eax, msg1	; print msg1 "enter a char"
 	call	print_string
-	call	print_nl
 
 	call	read_char	; user entered char - stored in EAX
 	mov	[chartr], eax	; store in mem
-	;mov	eax, [chartr]
-	;call	print_char
-	;call	print_nl
 
-	mov	eax, msg2	; print msg2
+	mov	eax, msg2	; print msg2 "enter a int"
 	call	print_string
+
+	call	read_int	; user entered int - stored in EAX
+	mov	[integer], eax	; store in mem
+
+
+	mov	eax, msg3	; print msg3 "the char entered was"
+	call	print_string
+	mov	eax, [chartr]	; pass user input to EAX to print to console
+	call	print_char
 	call	print_nl
 
-	mov	eax, msg3	; print msg3
+	mov	eax, msg4	; print msg4 "the int entered was"
 	call	print_string
-	call	print_nl
-
-	mov	eax, msg4	; print msg4
-	call	print_string
+	mov	eax, [integer]	; pass user input to EAX to print to console
+	call	print_int
 	call	print_nl
 
 ; end
