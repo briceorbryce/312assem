@@ -1,5 +1,4 @@
-; This simple program demonstrate that the processor
-; uses Little Endian
+; template assem file
 
 %include "asm_io.inc"
 
@@ -10,16 +9,16 @@ segment .data
 segment .text
 	global asm_main
 asm_main:
-	enter		0,0
+	enter	0,0
 	pusha
 ; start
 
 
 
 ; end
-	pusha
+;	pusha
 	popa
-	mov		eax, 0
+	mov	eax, 0
 	leave
 	ret
 
