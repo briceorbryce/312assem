@@ -9,8 +9,8 @@ segment .data
 	str2	db	"String #2: ", 0
 
 segment .bss
-	userstr	resq	1	; holds the user input - 16 bytes
-	backwrds resq	1	; holds the backwards string - 16 bytes
+	userstr	resb	6	; holds the 5 bytes the user inputed
+	backwrds resb	6	; holds the backwards string 
 
 segment .text
 	global asm_main
@@ -18,12 +18,14 @@ asm_main:
 	enter	0,0
 	pusha
 ; start
+	;set up reg 
 	mov	ebx, userstr	; mov addr of userstr to ebx
 	mov	ecx, backwrds	; mov addr of backwrds to ecx
-	mov	BYTE [ecx + 5], 0	; terminate string that hasn't been created yet
+	mov	BYTE [ecx + 5], 0  ; terminate string that hasn't been created yet
+	mov	BYTE [ebx + 5], 0  ; terminate with null byte
+
 	mov	eax, prompt	; print "enter 5 char str"
 	call	print_string
-
 	call	read_char	; get char of user input
 	mov	[ebx], al	; mov to ebx and userstr
 	mov	[ecx + 4], al	; mov to ecx and 4 bytes ahead
@@ -44,8 +46,6 @@ asm_main:
 	mov	[ebx + 4], al
 	mov	[ecx], al
 
-	mov	BYTE [ebx + 5], 0	; terminate with null byte
-
 	mov	eax, str1	; print "string 1: "
 	call	print_string
 	mov	eax, ecx	; print that string the user entered backwards
@@ -58,7 +58,7 @@ asm_main:
 	sub	BYTE [ebx + 3], 32
 	sub	BYTE [ebx + 4], 32
 	
-	mov	eax, str2	; print "string2:"
+	mov	eax, str2	; print "string2: "
 	call	print_string
 	mov	eax, ebx
 	call	print_string	
