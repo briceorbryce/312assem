@@ -18,10 +18,10 @@ asm_main:
 	enter	0,0
 	pusha
 ; start
-	;set up reg 
+	;set up memory
 	mov	ebx, userstr	; mov addr of userstr to ebx
 	mov	ecx, backwrds	; mov addr of backwrds to ecx
-	mov	BYTE [ecx + 5], 0  ; terminate string that hasn't been created yet
+	mov	BYTE [ecx + 5], 0  ; terminate with null byte
 	mov	BYTE [ebx + 5], 0  ; terminate with null byte
 
 	mov	eax, prompt	; print "enter 5 char str"
@@ -52,7 +52,7 @@ asm_main:
 	call	print_string
 	call	print_nl
 	
-	sub	BYTE [ebx], 32
+	sub	BYTE [ebx], 32		; subtract 32 from each char
 	sub	BYTE [ebx + 1], 32
 	sub	BYTE [ebx + 2], 32
 	sub	BYTE [ebx + 3], 32
@@ -60,7 +60,7 @@ asm_main:
 	
 	mov	eax, str2	; print "string2: "
 	call	print_string
-	mov	eax, ebx
+	mov	eax, ebx	; print the caps of the string the user entered
 	call	print_string	
 	call	print_nl
 ; end
