@@ -80,17 +80,17 @@ asm_main:
 	call	print_int
 	call	print_nl
 	
-        mov     eax, msg3
-        call    print_string
+	mov     eax, msg3
+	call    print_string
 	mov	eax, [divide3]
 	call	print_int
-        call    print_nl	
+	call    print_nl	
 	
-        mov     eax, msg4
-        call    print_string
+	mov     eax, msg4
+	call    print_string
 	mov	eax, [divide5]
 	call	print_int
-        call    print_nl
+	call    print_nl
 
 ; epilogue
 ;	mov esp, ebp

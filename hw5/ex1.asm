@@ -34,7 +34,7 @@ asm_main:
 	call	print_string
 	call	read_int
 	
-	mov DWORD [usrEnt], eax	; save input
+	mov DWORD [usrEnt], eax		; save input
 	cmp DWORD [usrEnt], 0		; user < 0 ? 
 	jl	exit_loop		; jmp if user entered neg
 	
