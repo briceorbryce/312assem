@@ -7,3 +7,4 @@ hw3/nasm_check/asm_io.inc
 hw3/nasm_check/driver.c
 hw3/nasm_check/Makefile
 hw4/nasm*
+hw5/nasm*
