@@ -5,7 +5,7 @@
 
 %include "asm_io.inc"
 
-section .data
+segment .data
 	msg1	db	"Enter an integer: ", 0x0
 	msg2	db	"It's the ASCII code for a white space.", 0x0
 	msg3	db	"It's the ASCII code for a digit.", 0x0
@@ -14,9 +14,9 @@ section .data
 	msg6	db	"It's not an ASCII code.", 0x0
 
 segment .bss
-	userEnt		resd	1	; user entered this
+	usrEnt	resd	1	; user entered this
 
-section .text   ; Text segment
+segment .text   ; Text segment
 global asm_main ; Default entry for ELF linking
 asm_main:
 	enter 0,0
@@ -34,26 +34,26 @@ asm_main:
 	call	print_string
 	call	read_int
 	
-	mov DWORD [userEnt], eax	; save input
-	cmp DWORD [userEnt], 0		; user < 0 ? 
+	mov DWORD [usrEnt], eax	; save input
+	cmp DWORD [usrEnt], 0		; user < 0 ? 
 	jl	exit_loop		; jmp if user entered neg
 	
-	cmp DWORD [userEnt], 0x20	; user == 32 (space) ?
+	cmp DWORD [usrEnt], 0x20	; user == 32 (space) ?
 	jz	entered_space		; jmp if true
 	
-	cmp DWORD [userEnt], 0x100 	; user >= 256 ?
+	cmp DWORD [usrEnt], 0x100 	; user >= 256 ?
 	jge	not_ascii		; jmp if true
 	
-	cmp DWORD [userEnt], 0x80	; user >= 128?
+	cmp DWORD [usrEnt], 0x80	; user >= 128?
 	jge	non_ext			; jmp if true
 	
-	cmp DWORD [userEnt], 0x3A	; user >= 58
+	cmp DWORD [usrEnt], 0x3A	; user >= 58
 	jge	non_ext			; jmp if true
 	
-	cmp DWORD [userEnt], 0x30	; user >= 48
+	cmp DWORD [usrEnt], 0x30	; user >= 48
 	jge	entered_digit		; jmp if true
 	
-	cmp DWORD [userEnt], 0x21	; user >= 33
+	cmp DWORD [usrEnt], 0x21	; user >= 33
 	jge	non_ext			; jmp if true
 	
 	; user entered 0-31
