@@ -28,7 +28,7 @@ asm_main:
 ; start
 	
 	loop_start:
-	mov	eax, msg1	; print enter an int
+	mov	eax, msg1	; print: enter an int
 	call	print_string
 	call 	read_int
 	
