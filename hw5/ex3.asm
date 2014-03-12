@@ -21,14 +21,12 @@ asm_main:
 	enter 0,0
 	pusha
 ; prologue
-;       push ebp
-;       mov ebp, esp
-;       sub esp, 0x4
-;       mov DWORD [ebp-4], 0x0
+;      push ebp
+;      mov ebp, esp
+;      sub esp, 0x1
+;      mov BYTE [ebp-1], 0x1
 ; start
 	ask_int_start:
-
-jmp ask_int_end
 
 	mov	eax, msg1	; print: enter an int
 	call	print_string
@@ -40,23 +38,30 @@ jmp ask_int_end
 	jl	ask_int_end		; jmp if true
 	
 	divide_all:
-	mov	eax, DWORD [usrEnt]	; reset eax and edx
+	mov	eax, DWORD [usrEnt]	; reset eax and edx and divby
 	xor	edx, edx
 	
-	mov	ecx, divby	; divide by counter from 1 - 50
-	div	ecx		; check remainder
-	cmp	edx, 0		; edx == 0 ?
+	xor	ecx, ecx
+	mov	cl, BYTE [divby]	; divide by counter from 1 - 50
+	div	ecx			; check remainder
+	cmp	edx, 0			; edx == 0 ?
 	jz	can_divide
 	jmp	not_divisible
 	
+	
 	can_divide:
-	mov	eax, indexlist		; get the index of where
-	imul	eax, 4			;  we are in the list (for dwords)
-	inc 	DWORD [list+eax]	; inc at that point
+;TODO	xor	eax, eax;
+	mov	eax, list		; get beginning of the list
+	xor	ebx, ebx,
+	mov	bl, BYTE [indexlist]	; get which spot in list (i)
+	imul	ebx, 4
+	inc 	BYTE [eax + ebx]	; inc at that point
 	
+	xor	eax, eax
 	mov	eax, indexlist		; inc the index
-	inc	DWORD [eax]
+	inc	BYTE [eax]
 	
+	xor	eax, eax
 	mov	eax, divby		; inc what we're dividing by
 	inc	DWORD [eax]
 	jmp	check_loop
@@ -72,32 +77,51 @@ jmp ask_int_end
 	
 	; check if divby < 50
 	check_loop:
-	cmp	DWORD [eax], 50
-	jg	divide_all
+	cmp	BYTE [eax], 50
+	jl	divide_all
+	mov	BYTE [divby], 1
 	jmp	ask_int_start
+	
 	
 	ask_int_end:			; okay now we print 50 lines
 	mov	BYTE [divby], 1		; set the number to divide by 
 	mov	BYTE [indexlist], 0	; set i to point to list[0]
-
-	; print_list:
 	
+	
+	print_list:
 	mov	eax, msg2		; print "the number of ints div by "
 	call	print_string
-	mov	eax, [divby]		; print "X"
-	movzx	eax, al
+	xor	eax, eax
+	mov	al, [divby]		; print "X"
 	call	print_int
 	mov	eax, msg2_1		; print " is "
 	call	print_string
 	
-	mov	ecx, list		; print list
-	add	cl, BYTE [indexlist]	;  at index indexlist
+	mov	ecx, list		; get list addr
+	xor	ebx, ebx		
+	mov	bl, BYTE [indexlist]	; get index
+	add	ecx, ebx		; add to get list[indexlist]
 	mov	eax, [ecx]
 	call	print_int
-	
-	
 	call	print_nl
 	
+	mov	eax, 0x32		; if divby <= 50
+	xor	ebx, ebx
+	mov	bl, BYTE [divby]
+	cmp	ebx, eax
+	
+	jge	exit_loop		; jmp if false
+	
+	xor	ecx, ecx
+	mov	ecx, divby		; add 1 to divby
+	inc	BYTE [ecx]
+	
+	xor	ecx, ecx
+	mov	cl, [indexlist]		; add 4 to indexlist
+	add	cl, 4			; to inc to the next index
+	mov	BYTE [indexlist], cl
+	
+	jmp	print_list		; loop again
 	
 	exit_loop:
 	
