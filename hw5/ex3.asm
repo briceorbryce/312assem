@@ -28,58 +28,47 @@ asm_main:
 ; start
 	ask_int_start:
 
-	mov	eax, msg1	; print: enter an int
+	mov	eax, msg1		; print: enter an int
 	call	print_string
 	call	read_int
 	
 	mov DWORD [usrEnt], eax
 	
-	cmp DWORD [usrEnt], 0		; user entered 0 ?
+	cmp DWORD [usrEnt], 0		; usrEnt < 0 ?
 	jl	ask_int_end		; jmp if true
 	
 	divide_all:
 	mov	eax, DWORD [usrEnt]	; reset eax and edx and divby
 	xor	edx, edx
-	
 	xor	ecx, ecx
 	mov	cl, BYTE [divby]	; divide by counter from 1 - 50
-	div	ecx			; check remainder
+	div	ecx			; eax / ecx -check remainder
 	cmp	edx, 0			; edx == 0 ?
-	jz	can_divide
+	jz	can_divide		; jmp if true
 	jmp	not_divisible
 	
 	
 	can_divide:
-;TODO	xor	eax, eax;
 	mov	eax, list		; get beginning of the list
 	xor	ebx, ebx,
 	mov	bl, BYTE [indexlist]	; get which spot in list (i)
 	imul	ebx, 4
 	inc 	BYTE [eax + ebx]	; inc at that point
 	
-	xor	eax, eax
-	mov	eax, indexlist		; inc the index
-	inc	BYTE [eax]
-	
-	xor	eax, eax
-	mov	eax, divby		; inc what we're dividing by
-	inc	DWORD [eax]
-	jmp	check_loop
-	
 	
 	not_divisible:
 	mov	eax, indexlist		; inc the index
 	inc	DWORD [eax]
-	
 	mov	eax, divby		; inc what we're dividing by
 	inc	DWORD [eax]
 	
 	
 	; check if divby < 50
 	check_loop:
-	cmp	BYTE [eax], 50
-	jl	divide_all
-	mov	BYTE [divby], 1
+	cmp	BYTE [eax], 50		; divby < 50 ?
+	jle	divide_all		; jmp if true
+	mov	BYTE [indexlist], 0	; reset i=0
+	mov	BYTE [divby], 1		; divby=1
 	jmp	ask_int_start
 	
 	
