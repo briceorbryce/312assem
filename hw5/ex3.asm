@@ -1,10 +1,10 @@
 ; briceorbryce
 ; ICS 312
-; Ex. 2
+; Ex. 3
 ; Identifying More Divisors
 
 %include "asm_io.inc"
-segment .data   ; data segment
+segment .data   
 	msg1		db      "Enter an integer: ", 0x0
         msg2		db      "The number of integers divisible by ", 0x0
 	msg2_1		db	" is ", 0x0
@@ -15,7 +15,7 @@ segment .bss
 	usrEnt		resd	1
 	list		resd	50
 
-segment .text   ; Text segment
+segment .text
 global asm_main ; Default entry for ELF linking
 asm_main:
 	enter 0,0
@@ -27,8 +27,7 @@ asm_main:
 ;      mov BYTE [ebp-1], 0x1
 ; start
 	ask_int_start:
-
-	mov	eax, msg1		; print: enter an int
+	mov	eax, msg1		; print: "enter an int"
 	call	print_string
 	call	read_int
 	
@@ -98,7 +97,6 @@ asm_main:
 	xor	ebx, ebx
 	mov	bl, BYTE [divby]
 	cmp	ebx, eax
-	
 	jge	exit_loop		; jmp if false
 	
 	xor	ecx, ecx
