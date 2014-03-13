@@ -11,6 +11,9 @@ segment .data
 	divby		db	1	; the number to divide by
 	indexlist	db	0	; index of place in list
 	amtOfInts	dd	0	; amt of ints user entered
+	pound		db	"#", 0x0
+	line		db	"-", 0x0
+	space		db	" ", 0x0
 	
 segment .bss
 	usrEnt		resd	1
@@ -22,10 +25,11 @@ asm_main:
 	enter 0,0
 	pusha
 ; prologue
-;      push ebp
-;      mov ebp, esp
-;      sub esp, 0x1
-;      mov BYTE [ebp-1], 0x1
+      push ebp
+      mov ebp, esp
+      sub esp, 0x2
+      mov BYTE [ebp-1], 0x0	; i = 0
+      mov BYTE [ebp-2], 0x1	; j = 1
 ; start
 	ask_int_start:
 	mov	eax, msg1		; print: "enter an int"
@@ -36,6 +40,7 @@ asm_main:
 	
 	cmp DWORD [usrEnt], 0		; usrEnt < 0 ?
 	jl	ask_int_end		; jmp if true
+	
 	
 	divide_all:
 	mov	eax, DWORD [usrEnt]	; reset eax and edx and divby
@@ -72,51 +77,66 @@ asm_main:
 	jmp	ask_int_start
 	
 	
-	ask_int_end:			; okay now we print 50 lines
-	mov	BYTE [divby], 1		; set the number to divide by 
-	mov	BYTE [indexlist], 0	; set i to point to list[0]
+	ask_int_end:
+	mov	eax, [list]		; eax list[0]
+	mov	DWORD [amtOfInts], eax	; save amt of rows to print
 	
 	
-	print_list:
-	mov	eax, msg2		; print "the number of ints div by "
+	loop_row:			; start of the row
+	mov	eax, pound
 	call	print_string
-	xor	eax, eax
-	mov	al, [divby]		; print "X"
-	call	print_int
-	mov	eax, msg2_1		; print " is "
-	call	print_string
+	mov	BYTE [ebp-2], 1
 	
-	mov	ecx, list		; get list addr
-	xor	ebx, ebx		
-	mov	bl, BYTE [indexlist]	; get index
-	add	ecx, ebx		; add to get list[indexlist]
-	mov	eax, [ecx]
-	call	print_int
+	
+		check_can_print:
+		xor	ecx, ecx
+		mov 	cl, BYTE [ebp-2]	; list[j * 4]
+		imul	ecx, 4
+		mov	edx, ecx
+		mov	ecx, [list+ecx]
+		cmp	DWORD [amtOfInts], ecx
+		jnz	no_pound
+		
+		
+		print_pound:
+		mov	eax, pound
+		call	print_string
+		dec	DWORD [list+edx]
+		jmp	doWhile
+		
+		no_pound:
+		mov	eax, space		; print space
+		call	print_string
+		
+		doWhile:			
+		inc	BYTE [ebp-2]		; j++
+		cmp	BYTE [ebp-2], 50	; j < 49 ?
+		jnz	check_can_print		; loop if true
+		
+		
+	vertical_loop:			; loops according to how many ints user enters
 	call	print_nl
+	dec	DWORD [amtOfInts]
+	cmp	DWORD [amtOfInts], 0	; if == 0 ?
+	jz	print_last_lines	; stop looping if true 
+	jmp	loop_row
 	
-	mov	eax, 0x32		; if divby <= 50
-	xor	ebx, ebx
-	mov	bl, BYTE [divby]
-	cmp	ebx, eax
-	jge	exit_loop		; jmp if false
+	print_last_lines:		; printing the "---"
+	mov	BYTE [ebp-1], 0x0	; i = 0
 	
-	xor	ecx, ecx
-	mov	ecx, divby		; add 1 to divby
-	inc	BYTE [ecx]
-	
-	xor	ecx, ecx
-	mov	cl, [indexlist]		; add 4 to indexlist
-	add	cl, 4			; to inc to the next index
-	mov	BYTE [indexlist], cl
-	
-	jmp	print_list		; loop again
+	print_lines:
+	mov	eax, line
+	call	print_string
+	inc	BYTE [ebp-1]
+	cmp 	BYTE [ebp-1], 50	; i < 50 ?
+	jnz	print_lines		; jmp if true
 	
 	exit_loop:
+	call	print_nl
 	
-	
-; epilogue
-;       mov esp, ebp
-;       pop ebp
+;epilogue
+      mov esp, ebp
+      pop ebp
 ; end
 	popa
 	mov eax, 0
