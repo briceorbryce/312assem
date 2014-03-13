@@ -110,7 +110,7 @@ asm_main:
 		
 		doWhile:			
 		inc	BYTE [ebp-2]		; j++
-		cmp	BYTE [ebp-2], 50	; j < 49 ?
+		cmp	BYTE [ebp-2], 50	; j < 50 ?
 		jnz	check_can_print		; loop if true
 		
 		
