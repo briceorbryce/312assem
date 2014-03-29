@@ -9,7 +9,7 @@ hw3/nasm_check/Makefile
 hw4/nasm*
 hw5/nasm*
 
-hw5/nasm_check/Makefile
-hw5/nasm_check/asm*
-hw5/nasm_check/driver.c
+hw6/nasm_check/Makefile
+hw6/nasm_check/asm*
+hw6/nasm_check/driver.c
 
