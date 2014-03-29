@@ -1,0 +1,13 @@
+#!/usr/bin/expect
+
+set timeout 20
+
+spawn "./hw6_ex1"
+
+expect "Enter an integer: " { send -- "129\n" }
+expect "Enter an integer: " { send -- "-88\n" }
+expect "Enter an integer: " { send -- "142341\n" }
+expect "Enter an integer: " { send -- "-591023\n" }
+expect "Enter an integer: " { send -- "0\n" }
+
+interact
