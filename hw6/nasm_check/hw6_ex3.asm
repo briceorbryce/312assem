@@ -70,9 +70,44 @@ asm_main:
 	
 	
 	check_pattern:			; "10*"
+	add	eax, 2
+	
+	cmp	eax, binRep + 31
+	jz	check_bit1
 	
 	
+	find_1:
+	cmp	BYTE [eax], 0x30
+	jz	increment_1
 	
+	jmp	find_0
+	
+	increment_1:
+	inc eax
+	jmp find_1
+	
+	
+	find_0:
+	inc	eax
+	cmp	eax, binRep +31
+	jge	print_pattern
+	
+	cmp	BYTE [eax], 0x30
+	jz	find_0
+	
+	inc	DWORD [countPat]
+	
+	cmp	eax, binRep +31
+	jge	print_pattern
+	
+	inc	eax
+	jmp	pattern_check
+	
+	check_bit1:
+	cmp	BYTE [eax], 0x31
+	jnz	print_pattern
+	
+	inc	DWORD [countPat]
 	
 	print_pattern:
 	mov	eax, msg3
