@@ -61,19 +61,33 @@ asm_main:
 	pattern_check:
 	cmp	WORD [eax], 0x3031	; "10" ?
 	jnz	next_bit		; jmp if false
-	jmp	check_pattern2
+	
+	add	eax, 3			; add 3 to address
+	jmp	pattern_check2		; "10[0|1]X" looking at X bit
 	
 	
 	next_bit:			; "must be "01"
 	inc	eax			; inc eax
-	jmp	pattern_check		; jmp
+	jmp	pattern_check		; jmp and chk pattern again
 	
 	
-	pattern_check2:			; "10" ? (check the same string)
-	add	eax, 3			; "10...10"
+	pattern_check2:			; check the same string
+	cmp	eax, binRep + 31	; 1st: check if outside boundry
+	jge	print_pattern
 	
-	cmp	eax, binRep + 31
-	jz	check_bit1
+	cmp	WORD [eax], 0x3031	; cmp "10" again
+	jnz	next_10_bit		; jmp if false
+	jmp	found_pattern
+	
+	next_10_bit:			; inc to next bit and check again
+	inc	eax
+	jmp	pattern_check2
+	
+	
+	found_pattern:
+	inc	DWORD [countPat]	; inc counter
+	add	eax, 3			; check for next "10"
+	jmp	pattern_check2
 	
 	
 	print_pattern:
@@ -99,8 +113,9 @@ asm_main:
 	mov eax, 0
 	leave
 	ret
-
+	
 	; resets the bits in binRep
+	; moving 0x30 or "0" to the rep of 32 bits
 	func_reset_bits:
 	push	ebp
 	mov	ebp, esp
