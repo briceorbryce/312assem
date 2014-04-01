@@ -61,7 +61,7 @@ asm_main:
 	pattern_check:
 	cmp	WORD [eax], 0x3031	; "10" ?
 	jnz	next_bit		; jmp if false
-	jmp	check_pattern
+	jmp	check_pattern2
 	
 	
 	next_bit:			; "must be "01"
@@ -69,45 +69,12 @@ asm_main:
 	jmp	pattern_check		; jmp
 	
 	
-	check_pattern:			; "10*"
-	add	eax, 2
+	pattern_check2:			; "10" ? (check the same string)
+	add	eax, 3			; "10...10"
 	
 	cmp	eax, binRep + 31
 	jz	check_bit1
 	
-	
-	find_1:
-	cmp	BYTE [eax], 0x30
-	jz	increment_1
-	
-	jmp	find_0
-	
-	increment_1:
-	inc eax
-	jmp find_1
-	
-	
-	find_0:
-	inc	eax
-	cmp	eax, binRep +31
-	jge	print_pattern
-	
-	cmp	BYTE [eax], 0x30
-	jz	find_0
-	
-	inc	DWORD [countPat]
-	
-	cmp	eax, binRep +31
-	jge	print_pattern
-	
-	inc	eax
-	jmp	pattern_check
-	
-	check_bit1:
-	cmp	BYTE [eax], 0x31
-	jnz	print_pattern
-	
-	inc	DWORD [countPat]
 	
 	print_pattern:
 	mov	eax, msg3
