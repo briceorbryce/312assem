@@ -75,16 +75,99 @@ asm_main:
 	func_calc_hex:
 	push	ebp
 	mov	ebp, esp
-	sub	esp, 0x1
+; prologue
+	sub	esp, 0x3		; create 3 local variables
+	mov	BYTE [ebp-1], 0x20	; bitCount = 32
+	mov	BYTE [ebp-2], 0		; currentHalfByte = 0
+	mov	BYTE [ebp-3], 0		; hexRepOffset = 0
 	
-	xor	ecx, ecx
-	mov	ecx, 0
+	mov	ebx, binRep 
 	
-	mov	ebx, [binRep + ecx]
-	//TODO
+	reset:				; new set of 4 bites to parse
+	mov	BYTE [ebp-2], 0		; currentHalfByte = 0
+	
+	
+	current_halfbyte:
+	cmp 	BYTE [ebx], 0x31	; cmp each bit to "1"
+	jnz	increment_bit
+	
+	
+	xor	eax, eax		; call calc_bit
+	mov	al, BYTE [ebp-1]	; param 1: bitCount
+	push	eax
+	call	calc_bit		; ret bitCount
+	add	esp, 4			; reset the stack
+					; eax: new currentHalfByte
+	mov	BYTE [ebp-2], al	; 
+	
+	increment_bit:
+	inc	ebx
+	dec	BYTE [ebp-2]		; currentHalfByte--
+	cmp	BYTE [ebp-2], 0		; currentHalfByte == 0 ?
+;	jz	fin_4bytes		; jmp if true
+	
+		
+; epilogue
+	mov	esp, ebp	
 	pop	ebp
 	ret
-
+	
+	
+	
+;; This function calculates what multiple of two should be returned
+;; 8, 4, 2, 1, 0
+;; Depending on where it is in the bit count
+;; return eax
+;; arg1: bitCount
+	
+	calc_bit:	
+; prologue
+	push	ebp
+	mov	ebp, esp
+	
+	; bitCount -> BYTE [ebp + 8] 
+	xor	eax, eax
+	xor	edx, edx
+	mov	edx, 4
+	mov	al, BYTE [ebp + 8]
+	div	edx
+	
+	cmp	edx, 3
+	jz	return_3
+	
+	cmp	edx, 2
+	jz	return_2
+	
+	cmp	edx, 1
+	jz	return_1
+	
+	; return 0
+	mov	eax, 0
+	jmp	exit
+	
+	return_3:
+	mov	eax, 3
+	jmp	exit
+	
+	return_2:
+	mov	eax, 2
+	jmp	exit
+	
+	return_1:
+	mov	eax, 1
+	jmp	exit
+	
+	
+	exit:
+	; return eax
+	
+; epilogue
+	mov	esp, ebp
+	pop	ebp
+	ret
+	
+	
+	
 	; resets the bits in binRep
 	func_reset_bits:
 	push	ebp
