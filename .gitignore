@@ -16,3 +16,6 @@ hw6/nasm_check/Makefile
 hw6/nasm_check/asm*
 hw6/nasm_check/driver.c
 
+hw8/nasm_check/Makefile
+hw8/nasm_check/asm*
+hw8/nasm_check/driver.c
