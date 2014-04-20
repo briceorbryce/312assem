@@ -2,7 +2,7 @@
 ; ics 312
 ; hw8
 ; ex1
-; Implementing an inputArray and a printArray function
+; Implementing and using a findValue function
 
 %include "asm_io.inc"
 
@@ -50,7 +50,9 @@ inputArray:
 ; prologue
 	push ebp
 	mov ebp, esp
-; sub esp, 0x4
+	sub esp, 0x8
+	mov DWORD [ebp-4], 0		; count = 0
+	mov DWORD [ebp-8], 0		; userInput = 0
 	
 	lea	ebx, [Array]		; mov the addr of array into ebx
 	
@@ -58,8 +60,21 @@ inputArray:
 	mov	eax, prompt		; print enter an int
 	call	print_string
 	call	read_int
+	mov	[ebp-8], eax		; userInput = eax
+	
+;call findValue
+	push	DWORD [eax]		; psh user input
+	push	DWORD [ebp-4]		; psh count
+	push	DWORD [ebp+8]		; psh Array
+	add	esp, 12			; rst stack
+	
+	cmp	eax, 0			; user entered a dup?
+	jnz	do			; ask again
+	
+	mov	eax, DWORD [ebp-8]	; eax = userInput
 	
 	mov	[ebx], eax		; mov user input to Array
+	inc	DWORD [ebp-4]		; count++
 	
 	while:
 	add	ebx, 4			; add 4 to get to next index
@@ -75,6 +90,45 @@ inputArray:
 	mov esp, ebp
 	pop ebp
 	ret
+	
+	
+;; Implementation of findValue
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; if a duplicate is found
+; mov eax, 1
+
+; int findValue (Array, count, userInput)
+; array = ebp+8
+; count = ebp+12
+; userInput = ebp+16
+segment .data
+        tryAgain        db      "Value already entered, try again!", 0x0A, 0x0
+segment .bss
+
+segment .text
+
+findValue:
+
+; prologue
+        push ebp
+        mov ebp, esp
+; sub esp, 0x4
+	push	ebx
+	
+	
+	do_count:
+	
+	
+
+        mov     eax, tryAgain
+        call    print_string
+
+; epilogue
+	pop ebx
+        mov esp, ebp
+        pop ebp
+        ret
+	
 
 ;; To implement: function printArray
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
