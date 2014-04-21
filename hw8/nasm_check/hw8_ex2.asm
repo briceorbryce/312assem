@@ -63,13 +63,15 @@ inputArray:
 	mov	[ebp-8], eax		; userInput = eax
 	
 ;call findValue
-	push	DWORD [eax]		; psh user input
+	push	eax			; psh user input
 	push	DWORD [ebp-4]		; psh count
 	push	DWORD [ebp+8]		; psh Array
+	call	findValue
 	add	esp, 12			; rst stack
 	
+					; eax = 0 || addr entered num
 	cmp	eax, 0			; user entered a dup?
-	jnz	do			; ask again
+	jnz	do			; jmp if not 0
 	
 	mov	eax, DWORD [ebp-8]	; eax = userInput
 	
@@ -115,13 +117,32 @@ findValue:
 ; sub esp, 0x4
 	push	ebx
 	
-	
 	do_count:
+	mov	eax, [ebp+12]				; eax = count
+	cmp	eax, 0					; cmp if init count == 0
+	jz	return_0				; jmp if true
+	
+	compare_value:
+	mov	ebx, Array
+	mov	edx, [ebp+16]
+	cmp	[ebx], edx				; array[i] == userInput ?
+	jz	have_value				; jmp if true
+	jmp	loop_again
+	
+	have_value:
+	mov     eax, tryAgain
+	call    print_string
+	mov	eax, ebx
+	jmp	exit_findValue
+	
+	loop_again:
+	dec	DWORD [ebp+12]				; count--
+	
+	return_0:
+	xor	eax, eax				; return 0
 	
 	
-
-        mov     eax, tryAgain
-        call    print_string
+	exit_findValue:
 
 ; epilogue
 	pop ebx
