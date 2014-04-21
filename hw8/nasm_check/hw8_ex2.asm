@@ -122,11 +122,12 @@ findValue:
 	cmp	eax, 0					; cmp if init count == 0
 	jz	return_0				; jmp if true
 	
-	compare_value:
 	mov	ebx, Array
-	mov	edx, [ebp+16]
+	mov	edx, [ebp+16]				; edx = userInput
+	
+	compare_value:
 	cmp	[ebx], edx				; array[i] == userInput ?
-	jz	have_value				; jmp if true
+	jz	have_value				; array already has value
 	jmp	loop_again
 	
 	have_value:
@@ -137,6 +138,12 @@ findValue:
 	
 	loop_again:
 	dec	DWORD [ebp+12]				; count--
+	add	ebx, 4					; array[i++]
+	
+	mov	eax, [ebp+12]				; count == 0 ?
+	cmp	eax, 0
+	jnz	compare_value
+	
 	
 	return_0:
 	xor	eax, eax				; return 0

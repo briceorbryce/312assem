@@ -1,0 +1,20 @@
+#!/usr/bin/expect
+
+set timeout 20
+
+spawn "./hw8_ex1"
+
+expect "Enter an integer: " { send -- "12\n" }
+expect "Enter an integer: " { send -- "6\n" }
+expect "Enter an integer: " { send -- "-3\n" }
+expect "Enter an integer: " { send -- "5\n" }
+expect "Enter an integer: " { send -- "6\n" }
+expect "Enter an integer: " { send -- "-33\n" }
+expect "Enter an integer: " { send -- "13\n" }
+expect "Enter an integer: " { send -- "14\n" }
+expect "Enter an integer: " { send -- "14\n" }
+expect "Enter an integer: " { send -- "57\n" }
+expect "Enter an integer: " { send -- "201\n" }
+expect "Enter an integer: " { send -- "-32\n" }
+
+interact
