@@ -274,7 +274,8 @@ printArray:
 
 ;; To implement: function swapValues
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; 
+; swaps two values, given they're addr
+; swapValues (swap2, swap1)
 ; 
 
 segment .data
@@ -284,3 +285,18 @@ segment .bss
 segment .text
 
 swapValues:
+
+; prologue
+	push ebp
+	mov ebp, esp
+	sub esp, 0x4
+	
+	mov	eax, [ebp+8]			; eax <- swap2
+	mov 	[ebp-4], [eax]			; temp = swap2
+	
+	
+	
+; epilogue
+	mov ebp, esp
+	pop ebp
+	ret
