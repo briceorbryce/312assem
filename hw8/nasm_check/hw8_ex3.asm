@@ -291,9 +291,18 @@ swapValues:
 	mov ebp, esp
 	sub esp, 0x4
 	
-	mov	eax, [ebp+8]			; eax <- swap2
-	mov 	[ebp-4], [eax]			; temp = swap2
+	mov	eax, [ebp+8]
+	mov	eax, [eax]			; eax = swap2
+	mov 	[ebp-4], eax			; temp = swap2 this
 	
+	mov	eax, [ebp+12]
+	mov	eax, [eax]			; eax = swap1
+	mov	ebx, [ebp+8]
+	mov	[ebx], eax			; swap2 = swap1
+	
+	mov	eax, [ebp-4]			; eax = temp
+	mov	ebx, [ebp+12]
+	mov	[ebx], eax			; swap1 = temp this
 	
 	
 ; epilogue
