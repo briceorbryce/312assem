@@ -20,7 +20,7 @@ hw8/nasm_check/Makefile
 hw8/nasm_check/asm*
 hw8/nasm_check/driver.c
 
-hw9/nasm_check/driver*
-hw9/nasm_check/asm*
-hw9/nasm_check/Makefile
+hw9/driver*
+hw9/asm*
+hw9/Makefile
 
