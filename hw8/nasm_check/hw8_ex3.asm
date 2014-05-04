@@ -306,6 +306,6 @@ swapValues:
 	
 	
 ; epilogue
-	mov ebp, esp
+	mov esp, ebp
 	pop ebp
 	ret
