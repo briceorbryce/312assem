@@ -27,9 +27,10 @@ mov BYTE [ebp-0xc], 0x03
 xor eax, eax
 xor ebx, ebx
 
-mov ax, [ebp-2]
-mov bx, [ebp-4]
-add eax, ebx
+mov al, BYTE [ebp-0xb]
+mov bl, [ebp-0xc]
+add al, bl
+movsx eax, al
 call print_int
 call print_nl
 
