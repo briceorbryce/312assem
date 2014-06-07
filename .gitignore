@@ -6,7 +6,10 @@ hw3/nasm_check/asm_io.asm
 hw3/nasm_check/asm_io.inc
 hw3/nasm_check/driver.c
 hw3/nasm_check/Makefile
+
 hw4/nasm*
+hw4/*.o
+
 hw5/nasm_check/asm_io.asm
 hw5/nasm_check/asm_io.inc
 hw5/nasm_check/driver.c
