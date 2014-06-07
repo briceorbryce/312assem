@@ -15,10 +15,10 @@ mov ebp, esp
 mov ebp, esp    ; move stack ptr to ebp
 
 sub esp, 0xC
-mov WORD [ebp-2], 0x0006
-mov WORD [ebp-4], 0x0006
-mov WORD [ebp-6], 0x0003
-mov WORD [ebp-8], 0x002C
+mov WORD [ebp-2], 0x8ff0
+mov WORD [ebp-4], 0xa026
+mov WORD [ebp-6], 0x6043
+mov WORD [ebp-8], 0x7abc
 mov BYTE [ebp-9], 0xF3
 mov BYTE [ebp-0xa], 0x0D
 mov BYTE [ebp-0xb], 0xE5
@@ -26,9 +26,16 @@ mov BYTE [ebp-0xc], 0x03
 
 xor eax, eax
 xor ebx, ebx
+mov ax, [ebp-4]
+mov bx, [ebp-2]
+sub ax, bx
 
-mov al, BYTE [ebp-0xb]
-mov bl, [ebp-0xc]
+
+xor eax, eax
+xor ebx, ebx
+
+mov al, BYTE [ebp-0x9]
+mov bl, [ebp-0xa]
 add al, bl
 movsx eax, al
 call print_int
