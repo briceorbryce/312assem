@@ -1,6 +1,8 @@
 study1/nasm_check/*
 study1/nasm_check/Makefile
-fizzbuzz/nasm*
+
+fizzbuzz/a.out
+fizzbuzz/*.o
 
 hw3/nasm_check/asm_io.asm
 hw3/nasm_check/asm_io.inc
