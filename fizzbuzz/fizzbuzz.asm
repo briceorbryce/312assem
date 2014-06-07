@@ -3,7 +3,6 @@ section .data   ; data segment
 	fizzlen	 equ    $-fizz
 	buzz	db	"buzz", 0x0
 	buzzlen	equ	$-buzz
-	count	db	9
 
 section .text
  global _start
